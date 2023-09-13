@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_flutter/widgets/correct_icon.dart';
+import 'package:quiz_flutter/widgets/wrong_icon.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({super.key});
@@ -8,21 +10,13 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> score = [
-    const Icon(
-      Icons.check,
-      color: Colors.green,
-    ),
-    const Icon(
-      Icons.close,
-      color: Colors.red,
-    )
-  ];
+  List<Widget> score = [];
   List<String> questions = [
     "Você pode fazer uma vaca descer uma escada, mas não subir.",
     "Aproximadamente um quarto dos ossos humanos estão nos pés.",
     "O sangue de uma lesma é verde."
   ];
+  List<bool> answers = [false, true, true];
   int questionIndex = 0;
 
   @override
@@ -96,6 +90,16 @@ class _QuizPageState extends State<QuizPage> {
 
   void onPressedFalseButton() {
     changeQuestion();
+  }
+
+  void addScore(bool isCorrect) {
+    Widget answerIcon = const CorrectIcon();
+
+    if (!isCorrect) {
+      answerIcon = const WrongIcon();
+    }
+
+    score.add(answerIcon);
   }
 
   void changeQuestion() {
