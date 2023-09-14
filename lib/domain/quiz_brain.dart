@@ -93,4 +93,8 @@ class QuizBrain {
   bool isFinished() {
     return _questionIndex == _questions.length - 1;
   }
+
+  void reset() {
+    _questionIndex = 0;
+  }
 }

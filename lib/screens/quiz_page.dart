@@ -82,12 +82,10 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void onPressedTrueButton() {
-    changeQuestion();
     addScore(true);
   }
 
   void onPressedFalseButton() {
-    changeQuestion();
     addScore(false);
   }
 
@@ -98,14 +96,31 @@ class _QuizPageState extends State<QuizPage> {
       answerIcon = const WrongIcon();
     }
 
-    if (!quizBrain.isFinished()) {
-      score.add(answerIcon);
-    }
+    setState(() {
+      if (!quizBrain.isFinished()) {
+        score.add(answerIcon);
+        quizBrain.nextQuestion();
+      } else {
+        quizBrain.reset();
+        score = [];
+        showEndMessage();
+      }
+    });
   }
 
-  void changeQuestion() {
-    setState(() {
-      quizBrain.nextQuestion();
-    });
+  void showEndMessage() {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Sucesso!'),
+        content: const Text('Você chegou ao fim do quiz.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('Legal!'),
+          ),
+        ],
+      ),
+    );
   }
 }
