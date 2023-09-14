@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_flutter/types/question.dart';
 import 'package:quiz_flutter/widgets/correct_icon.dart';
 import 'package:quiz_flutter/widgets/wrong_icon.dart';
 
@@ -11,10 +12,19 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Widget> score = [];
-  List<String> questions = [
-    "Você pode fazer uma vaca descer uma escada, mas não subir.",
-    "Aproximadamente um quarto dos ossos humanos estão nos pés.",
-    "O sangue de uma lesma é verde."
+  List<Question> questions = [
+    Question(
+      text: "Você pode fazer uma vaca descer uma escada, mas não subir.",
+      answer: false,
+    ),
+    Question(
+      text: "Aproximadamente um quarto dos ossos humanos estão nos pés.",
+      answer: true,
+    ),
+    Question(
+      text: "O sangue de uma lesma é verde.",
+      answer: true,
+    )
   ];
   List<bool> answers = [false, true, true];
   int questionIndex = 0;
@@ -31,7 +41,7 @@ class _QuizPageState extends State<QuizPage> {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
-                questions[questionIndex],
+                questions[questionIndex].text,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 24,
