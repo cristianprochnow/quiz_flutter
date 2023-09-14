@@ -1,7 +1,8 @@
 import 'package:quiz_flutter/types/question.dart';
 
 class QuizBrain {
-  List<Question> questions = [
+  int _questionIndex = 0;
+  final List<Question> _questions = [
     Question(
       text: 'Alguns gatos são alérgicos a humanos',
       answer: true,
@@ -62,4 +63,34 @@ class QuizBrain {
       answer: true,
     ),
   ];
+
+  String getQuestionText() {
+    return getQuestion(_questionIndex).text;
+  }
+
+  bool getQuestionAnswer() {
+    return getQuestion(_questionIndex).answer;
+  }
+
+  bool isCorrectAnswer(bool givenValue) {
+    return givenValue == getQuestionAnswer();
+  }
+
+  Question getQuestion(int questionIndex) {
+    return _questions[questionIndex];
+  }
+
+  void setQuestionIndex(int questionIndex) {
+    _questionIndex = questionIndex;
+  }
+
+  void nextQuestion() {
+    if (_questionIndex < _questions.length - 1) {
+      _questionIndex++;
+    }
+  }
+
+  bool isFinished() {
+    return _questionIndex == _questions.length - 1;
+  }
 }

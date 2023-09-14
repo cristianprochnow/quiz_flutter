@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_flutter/types/question.dart';
+
+import 'package:quiz_flutter/domain/quiz_brain.dart';
 import 'package:quiz_flutter/widgets/correct_icon.dart';
 import 'package:quiz_flutter/widgets/wrong_icon.dart';
 
@@ -12,22 +13,8 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Widget> score = [];
-  List<Question> questions = [
-    Question(
-      text: "Você pode fazer uma vaca descer uma escada, mas não subir.",
-      answer: false,
-    ),
-    Question(
-      text: "Aproximadamente um quarto dos ossos humanos estão nos pés.",
-      answer: true,
-    ),
-    Question(
-      text: "O sangue de uma lesma é verde.",
-      answer: true,
-    )
-  ];
-  List<bool> answers = [false, true, true];
   int questionIndex = 0;
+  QuizBrain quizBrain = QuizBrain();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +28,7 @@ class _QuizPageState extends State<QuizPage> {
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
-                questions[questionIndex].text,
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 24,
@@ -96,31 +83,29 @@ class _QuizPageState extends State<QuizPage> {
 
   void onPressedTrueButton() {
     changeQuestion();
+    addScore(true);
   }
 
   void onPressedFalseButton() {
     changeQuestion();
+    addScore(false);
   }
 
-  void addScore(bool isCorrect) {
+  void addScore(bool givenValue) {
     Widget answerIcon = const CorrectIcon();
 
-    if (!isCorrect) {
+    if (!quizBrain.isCorrectAnswer(givenValue)) {
       answerIcon = const WrongIcon();
     }
 
-    score.add(answerIcon);
+    if (!quizBrain.isFinished()) {
+      score.add(answerIcon);
+    }
   }
 
   void changeQuestion() {
     setState(() {
-      if (questionIndex + 1 == questions.length) {
-        questionIndex = 0;
-
-        return;
-      }
-
-      questionIndex++;
+      quizBrain.nextQuestion();
     });
   }
 }
